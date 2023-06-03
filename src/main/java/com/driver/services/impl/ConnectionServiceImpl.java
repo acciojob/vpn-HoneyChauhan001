@@ -29,6 +29,9 @@ public class ConnectionServiceImpl implements ConnectionService {
         //Else, establish the connection where the maskedIp is "updatedCountryCode.serviceProviderId.userId" and return the updated user. If multiple service providers allow you to connect to the country, use the service provider having smallest id.
 
         User user = userRepository2.findById(userId).get();
+        if(user == null){
+            throw new Exception("no user present");
+        }
 
         if(user.getConnected()==true){
             throw new Exception("Already connected");
@@ -71,11 +74,9 @@ public class ConnectionServiceImpl implements ConnectionService {
         user.getConnectionList().add(savedConnection);
         user.setConnected(true);
         user.setMaskedIp("" + countryName1.toCode() + "" + serviceProviderId + "" + user.getId() );
-        serviceProvider.getUsers().add(user);
-        user.getServiceProviderList().add(serviceProvider);
         ServiceProvider savedServiceProvider = serviceProviderRepository2.save(serviceProvider);
         User saveduser = userRepository2.save(user);
-        return saveduser;
+        return user;
     }
 
     @Override
@@ -91,7 +92,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         user.setConnected(false);
 
         User savedUser = userRepository2.save(user);
-        return savedUser;
+        return user;
     }
     @Override
     public User communicate(int senderId, int receiverId) throws Exception {
@@ -121,7 +122,7 @@ public class ConnectionServiceImpl implements ConnectionService {
 
         try{
             User savedSender = connect(senderId,countryNameofReceiver.toString());
-            return savedSender;
+            return sender;
         }catch (Exception e) {
             throw new Exception("Cannot establish communication");
         }

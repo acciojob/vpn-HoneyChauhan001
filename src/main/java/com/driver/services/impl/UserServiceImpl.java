@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
         savedUser.setOriginalIp("" + country.getCode() + "." + savedUser.getId());
         savedUser = userRepository3.save(savedUser);
 
-        return savedUser;
+        return user;
 
     }
 
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
         ServiceProvider savedServiceProvider = serviceProviderRepository3.save(serviceProvider);
         User savedUser = userRepository3.save(user);
-        return savedUser;
+        return user;
 
 
 
