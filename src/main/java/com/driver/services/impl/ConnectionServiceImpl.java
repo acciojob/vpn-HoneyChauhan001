@@ -84,7 +84,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         //If the given user was not connected to a vpn, throw "Already disconnected" exception.
         //Else, disconnect from vpn, make masked Ip as null, update relevant attributes and return updated user.
         User user = userRepository2.findById(userId).get();
-        if(user.getConnected()==false){
+        if(user.getConnected()==false || user.getConnected()==null){
             throw new Exception("Already disconnected");
         }
 
