@@ -77,8 +77,8 @@ public class ConnectionServiceImpl implements ConnectionService {
         user.getConnectionList().add(savedConnection);
         user.setConnected(true);
         user.setMaskedIp("" + countryToConnect.toCode() + "." + serviceProviderId + "." + user.getId() );
-//        ServiceProvider savedServiceProvider = serviceProviderRepository2.save(serviceProvider);
-//        User saveduser = userRepository2.save(user);
+        ServiceProvider savedServiceProvider = serviceProviderRepository2.save(serviceProviderToConnect);
+        User saveduser = userRepository2.save(user);
         return user;
     }
 
@@ -133,31 +133,34 @@ public class ConnectionServiceImpl implements ConnectionService {
         List<ServiceProvider> serviceProviders = sender.getServiceProviderList();
         boolean flag = false;
         int serviceProviderId = Integer.MAX_VALUE;
+        ServiceProvider serviceProviderToConnect = null;
         for(ServiceProvider serviceProvider : serviceProviders){
             for(Country country : serviceProvider.getCountryList()){
                 if(country.getCountryName().equals(countryNameofReceiver)){
                     flag = true;
-                    serviceProviderId = Math.min(serviceProviderId,serviceProvider.getId());
+                    if(serviceProviderId > serviceProvider.getId()){
+                        serviceProviderId = serviceProvider.getId();
+                        serviceProviderToConnect = serviceProvider;
+                    }
                 }
             }
         }
         if(flag == false){
             throw new Exception("Cannot establish communication");
         }
-        ServiceProvider serviceProvider = serviceProviderRepository2.findById(serviceProviderId).get();
 
         Connection connection = new Connection();
-        connection.setServiceProvider(serviceProvider);
+        connection.setServiceProvider(serviceProviderToConnect);
         connection.setUser(sender);
         Connection savedConnection = connectionRepository2.save(connection);
 
-        serviceProvider.getConnectionList().add(savedConnection);
+        serviceProviderToConnect.getConnectionList().add(savedConnection);
         sender.getConnectionList().add(savedConnection);
         sender.setConnected(true);
         sender.setMaskedIp("" + countryNameofReceiver.toCode() + "." + serviceProviderId + "." + sender.getId() );
-//        ServiceProvider savedServiceProvider = serviceProviderRepository2.save(serviceProvider);
-//        User saveduser = userRepository2.save(sender);
-        return sender;
+        ServiceProvider savedServiceProvider = serviceProviderRepository2.save(serviceProviderToConnect);
+        User saveduser = userRepository2.save(sender);
+        return saveduser;
 
     }
     private CountryName countryNameByCode(String code){
