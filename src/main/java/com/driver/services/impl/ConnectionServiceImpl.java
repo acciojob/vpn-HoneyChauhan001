@@ -52,25 +52,28 @@ public class ConnectionServiceImpl implements ConnectionService {
         List<ServiceProvider> serviceProviders = user.getServiceProviderList();
         boolean flag = false;
         int serviceProviderId = Integer.MAX_VALUE;
+        ServiceProvider serviceProviderToConnect = null;
         for(ServiceProvider serviceProvider : serviceProviders){
             for(Country country : serviceProvider.getCountryList()){
                 if(country.getCountryName().equals(countryToConnect)){
                     flag = true;
-                    serviceProviderId = Math.min(serviceProviderId,serviceProvider.getId());
+                    if(serviceProviderId>serviceProvider.getId()){
+                        serviceProviderId = serviceProvider.getId();
+                        serviceProviderToConnect = serviceProvider;
+                    }
                 }
             }
         }
         if(flag == false){
             throw new Exception("Unable to connect");
         }
-        ServiceProvider serviceProvider = serviceProviderRepository2.findById(serviceProviderId).get();
 
         Connection connection = new Connection();
-        connection.setServiceProvider(serviceProvider);
+        connection.setServiceProvider(serviceProviderToConnect);
         connection.setUser(user);
         Connection savedConnection = connectionRepository2.save(connection);
 
-        serviceProvider.getConnectionList().add(savedConnection);
+        serviceProviderToConnect.getConnectionList().add(savedConnection);
         user.getConnectionList().add(savedConnection);
         user.setConnected(true);
         user.setMaskedIp("" + countryToConnect.toCode() + "" + serviceProviderId + "" + user.getId() );
