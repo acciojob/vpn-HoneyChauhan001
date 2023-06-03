@@ -73,7 +73,7 @@ public class ConnectionServiceImpl implements ConnectionService {
 
         serviceProviderRepository2.save(serviceProvider);
         User savedUser = userRepository2.save(user);
-        return savedUser;
+        return user;
     }
 
     @Override
