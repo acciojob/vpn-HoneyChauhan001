@@ -105,16 +105,23 @@ public class ConnectionServiceImpl implements ConnectionService {
         //If communication can not be established due to any reason, throw "Cannot establish communication" exception
 
         User sender = userRepository2.findById(senderId).get();
+        if(sender == null){
+            throw new Exception("Sender not present");
+        }
         User receiver = userRepository2.findById(receiverId).get();
+        if(receiver == null){
+            throw new Exception("Receiver not present");
+        }
+
         CountryName countryNameofReceiver;
         if(receiver.getConnected()==true){
             countryNameofReceiver = countryNameByCode(receiver.getMaskedIp().substring(0,3));
         }
         else {
-            countryNameofReceiver = countryNameByCode(receiver.getOriginalIp().substring(0,3));
+            countryNameofReceiver = receiver.getOriginalCountry().getCountryName();
         }
 
-        CountryName countryNameOfSender = countryNameByCode(sender.getOriginalIp().substring(0,3));
+        CountryName countryNameOfSender = sender.getOriginalCountry().getCountryName();
 
         if(countryNameofReceiver.equals(countryNameOfSender)){
             return sender;
