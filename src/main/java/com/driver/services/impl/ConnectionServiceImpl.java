@@ -79,7 +79,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         user.setMaskedIp("" + countryToConnect.toCode() + "." + serviceProviderId + "." + user.getId() );
         ServiceProvider savedServiceProvider = serviceProviderRepository2.save(serviceProviderToConnect);
         User saveduser = userRepository2.save(user);
-        return saveduser;
+        return user;
     }
 
     @Override
