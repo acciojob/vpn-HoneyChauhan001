@@ -31,24 +31,12 @@ public class ConnectionServiceImpl implements ConnectionService {
         User user = userRepository2.findById(userId).get();
         String upper_countryName = countryName.toUpperCase();
         CountryName countryName1;
-        if(upper_countryName == "IND"){
-            countryName1 = CountryName.IND;
-        }
-        else if(upper_countryName == "AUS"){
-            countryName1 = CountryName.AUS;
-        }
-        else if(upper_countryName == "USA"){
-            countryName1 = CountryName.USA;
-        }
-        else if(upper_countryName == "CHI"){
-            countryName1 = CountryName.CHI;
-        }
-        else if(upper_countryName == "JPN"){
-            countryName1 = CountryName.JPN;
-        }
-        else {
+        try{
+            countryName1 = CountryName.valueOf(upper_countryName);
+        } catch (Exception e){
             throw new Exception("Country not found");
         }
+
         if(user.getConnected()==true){
             throw new Exception("Already connected");
         }
