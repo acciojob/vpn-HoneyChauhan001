@@ -49,11 +49,11 @@ public class ConnectionServiceImpl implements ConnectionService {
         else {
             throw new Exception("Country not found");
         }
-        if(user.isConnected()==true){
+        if(user.getConnected()==true){
             throw new Exception("Already connected");
         }
 
-        if(user.getCountry().getCountryName().equals(countryName1)){
+        if(user.getOriginalCountry().getCountryName().equals(countryName1)){
             return user;
         }
 
@@ -93,7 +93,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         //If the given user was not connected to a vpn, throw "Already disconnected" exception.
         //Else, disconnect from vpn, make masked Ip as null, update relevant attributes and return updated user.
         User user = userRepository2.findById(userId).get();
-        if(user.isConnected()==false){
+        if(user.getConnected()==false){
             throw new Exception("Already disconnected");
         }
 
@@ -116,7 +116,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         User sender = userRepository2.findById(senderId).get();
         User receiver = userRepository2.findById(receiverId).get();
         CountryName countryNameofReceiver;
-        if(receiver.isConnected()==true){
+        if(receiver.getConnected()==true){
             countryNameofReceiver = countryNameByCode(receiver.getMaskedIp().substring(0,3));
         }
         else {

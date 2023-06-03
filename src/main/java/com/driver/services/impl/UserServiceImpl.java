@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         country.setCode(countryName1.toCode());
         country.setUser(user);
 
-        user.setCountry(country);
+        user.setOriginalCountry(country);
 
         User savedUser = userRepository3.save(user);
 
