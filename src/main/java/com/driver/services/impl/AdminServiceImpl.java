@@ -57,24 +57,29 @@ public class AdminServiceImpl implements AdminService {
 
         String upper_string = countryName.toUpperCase();
         CountryName countryName1;
-        if(upper_string == "IND"){
-            countryName1 = CountryName.IND;
-        }
-        else if(upper_string == "AUS"){
-            countryName1 = CountryName.AUS;
-        }
-        else if(upper_string == "USA"){
-            countryName1 = CountryName.USA;
-        }
-        else if(upper_string == "CHI"){
-            countryName1 = CountryName.CHI;
-        }
-        else if(upper_string == "JPN"){
-            countryName1 = CountryName.JPN;
-        }
-        else {
+        try{
+            countryName1 = CountryName.valueOf(upper_string);
+        } catch (Exception e){
             throw new Exception("Country not found");
         }
+//        if(upper_string == "IND"){
+//            countryName1 = CountryName.IND;
+//        }
+//        else if(upper_string == "AUS"){
+//            countryName1 = CountryName.AUS;
+//        }
+//        else if(upper_string == "USA"){
+//            countryName1 = CountryName.USA;
+//        }
+//        else if(upper_string == "CHI"){
+//            countryName1 = CountryName.CHI;
+//        }
+//        else if(upper_string == "JPN"){
+//            countryName1 = CountryName.JPN;
+//        }
+//        else {
+//            throw new Exception("Country not found");
+//        }
 
         Country country = new Country();
         country.setCountryName(countryName1);
