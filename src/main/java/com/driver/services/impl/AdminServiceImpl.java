@@ -43,7 +43,7 @@ public class AdminServiceImpl implements AdminService {
 
         admin.getServiceProviders().add(serviceProvider);
         Admin savedAdmin = adminRepository1.save(admin);
-        return savedAdmin;
+        return admin;
 
 
     }
@@ -90,7 +90,7 @@ public class AdminServiceImpl implements AdminService {
 
         ServiceProvider savedServiceProvider = serviceProviderRepository1.save(serviceProvider);
 
-        return savedServiceProvider;
+        return serviceProvider;
     }
 
 }
