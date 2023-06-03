@@ -29,16 +29,17 @@ public class ConnectionServiceImpl implements ConnectionService {
         //Else, establish the connection where the maskedIp is "updatedCountryCode.serviceProviderId.userId" and return the updated user. If multiple service providers allow you to connect to the country, use the service provider having smallest id.
 
         User user = userRepository2.findById(userId).get();
+
+        if(user.getConnected()==true){
+            throw new Exception("Already connected");
+        }
+
         String upper_countryName = countryName.toUpperCase();
         CountryName countryName1;
         try{
             countryName1 = CountryName.valueOf(upper_countryName);
         } catch (Exception e){
             throw new Exception("Country not found");
-        }
-
-        if(user.getConnected()==true){
-            throw new Exception("Already connected");
         }
 
         if(user.getOriginalCountry().getCountryName().equals(countryName1)){
@@ -69,10 +70,12 @@ public class ConnectionServiceImpl implements ConnectionService {
         serviceProvider.getConnectionList().add(savedConnection);
         user.getConnectionList().add(savedConnection);
         user.setConnected(true);
+        user.getServiceProviderList().add(serviceProvider);
+        serviceProvider.getUsers().add(user);
         user.setMaskedIp("" + countryName1.toCode() + "" + serviceProviderId + "" + user.getId() );
 
         serviceProviderRepository2.save(serviceProvider);
-        User savedUser = userRepository2.save(user);
+        userRepository2.save(user);
         return user;
     }
 
