@@ -38,14 +38,14 @@ public class ConnectionServiceImpl implements ConnectionService {
         }
 
         String upper_countryName = countryName.toUpperCase();
-        CountryName countryName1;
-        try{
-            countryName1 = CountryName.valueOf(upper_countryName);
-        } catch (Exception e){
-            throw new Exception("Country not found");
-        }
+        CountryName countryToConnect = CountryName.valueOf(upper_countryName);
+//        try{
+//            countryToConnect = CountryName.valueOf(upper_countryName);
+//        } catch (Exception e){
+//            throw new Exception("Country not found");
+//        }
 
-        if(user.getOriginalCountry().getCountryName().equals(countryName1)){
+        if(user.getOriginalCountry().getCountryName().equals(countryToConnect)){
             return user;
         }
 
@@ -54,7 +54,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         int serviceProviderId = Integer.MAX_VALUE;
         for(ServiceProvider serviceProvider : serviceProviders){
             for(Country country : serviceProvider.getCountryList()){
-                if(country.getCountryName().equals(countryName1)){
+                if(country.getCountryName().equals(countryToConnect)){
                     flag = true;
                     serviceProviderId = Math.min(serviceProviderId,serviceProvider.getId());
                 }
@@ -73,9 +73,9 @@ public class ConnectionServiceImpl implements ConnectionService {
         serviceProvider.getConnectionList().add(savedConnection);
         user.getConnectionList().add(savedConnection);
         user.setConnected(true);
-        user.setMaskedIp("" + countryName1.toCode() + "" + serviceProviderId + "" + user.getId() );
-        ServiceProvider savedServiceProvider = serviceProviderRepository2.save(serviceProvider);
-        User saveduser = userRepository2.save(user);
+        user.setMaskedIp("" + countryToConnect.toCode() + "" + serviceProviderId + "" + user.getId() );
+//        ServiceProvider savedServiceProvider = serviceProviderRepository2.save(serviceProvider);
+//        User saveduser = userRepository2.save(user);
         return user;
     }
 
