@@ -38,7 +38,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         }
 
         String upper_countryName = countryName.toUpperCase();
-        CountryName countryToConnect = CountryName.valueOf(upper_countryName);
+        CountryName countryToConnect;
         try{
             countryToConnect = CountryName.valueOf(upper_countryName);
         } catch (Exception e){
