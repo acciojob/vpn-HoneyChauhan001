@@ -76,7 +76,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         serviceProviderToConnect.getConnectionList().add(savedConnection);
         user.getConnectionList().add(savedConnection);
         user.setConnected(true);
-        user.setMaskedIp("" + countryToConnect.toCode() + "" + serviceProviderId + "" + user.getId() );
+        user.setMaskedIp("" + countryToConnect.toCode() + "." + serviceProviderId + "." + user.getId() );
 //        ServiceProvider savedServiceProvider = serviceProviderRepository2.save(serviceProvider);
 //        User saveduser = userRepository2.save(user);
         return user;
@@ -154,10 +154,10 @@ public class ConnectionServiceImpl implements ConnectionService {
         serviceProvider.getConnectionList().add(savedConnection);
         sender.getConnectionList().add(savedConnection);
         sender.setConnected(true);
-        sender.setMaskedIp("" + countryNameofReceiver.toCode() + "" + serviceProviderId + "" + sender.getId() );
-        ServiceProvider savedServiceProvider = serviceProviderRepository2.save(serviceProvider);
-        User saveduser = userRepository2.save(sender);
-        return saveduser;
+        sender.setMaskedIp("" + countryNameofReceiver.toCode() + "." + serviceProviderId + "." + sender.getId() );
+//        ServiceProvider savedServiceProvider = serviceProviderRepository2.save(serviceProvider);
+//        User saveduser = userRepository2.save(sender);
+        return sender;
 
     }
     private CountryName countryNameByCode(String code){
