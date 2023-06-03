@@ -70,13 +70,12 @@ public class ConnectionServiceImpl implements ConnectionService {
         serviceProvider.getConnectionList().add(savedConnection);
         user.getConnectionList().add(savedConnection);
         user.setConnected(true);
-        user.getServiceProviderList().add(serviceProvider);
-        serviceProvider.getUsers().add(user);
         user.setMaskedIp("" + countryName1.toCode() + "" + serviceProviderId + "" + user.getId() );
-
-        serviceProviderRepository2.save(serviceProvider);
-        userRepository2.save(user);
-        return user;
+        serviceProvider.getUsers().add(user);
+        user.getServiceProviderList().add(serviceProvider);
+        ServiceProvider savedServiceProvider = serviceProviderRepository2.save(serviceProvider);
+        User saveduser = userRepository2.save(user);
+        return saveduser;
     }
 
     @Override
