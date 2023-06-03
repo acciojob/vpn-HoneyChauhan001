@@ -127,12 +127,34 @@ public class ConnectionServiceImpl implements ConnectionService {
             return sender;
         }
 
-        try{
-            User savedSender = connect(senderId,countryNameofReceiver.toString());
-            return sender;
-        }catch (Exception e) {
+        List<ServiceProvider> serviceProviders = sender.getServiceProviderList();
+        boolean flag = false;
+        int serviceProviderId = Integer.MAX_VALUE;
+        for(ServiceProvider serviceProvider : serviceProviders){
+            for(Country country : serviceProvider.getCountryList()){
+                if(country.getCountryName().equals(countryNameofReceiver)){
+                    flag = true;
+                    serviceProviderId = Math.min(serviceProviderId,serviceProvider.getId());
+                }
+            }
+        }
+        if(flag == false){
             throw new Exception("Cannot establish communication");
         }
+        ServiceProvider serviceProvider = serviceProviderRepository2.findById(serviceProviderId).get();
+
+        Connection connection = new Connection();
+        connection.setServiceProvider(serviceProvider);
+        connection.setUser(sender;
+        Connection savedConnection = connectionRepository2.save(connection);
+
+        serviceProvider.getConnectionList().add(savedConnection);
+        sender.getConnectionList().add(savedConnection);
+        sender.setConnected(true);
+        sender.setMaskedIp("" + countryNameofReceiver.toCode() + "" + serviceProviderId + "" + sender.getId() );
+        ServiceProvider savedServiceProvider = serviceProviderRepository2.save(serviceProvider);
+        User saveduser = userRepository2.save(sender);
+        return saveduser;
 
     }
     private CountryName countryNameByCode(String code){
